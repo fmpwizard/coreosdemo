@@ -1,10 +1,31 @@
 package main
 
 import (
+	"bytes"
+	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 )
+
+func increaseEtcdCnt() {
+
+	data := fmt.Sprintf("value=%+v", rand.Int())
+	log.Printf("here ut comes %s", data)
+	req, _ := http.NewRequest("PUT", "http://etcd:4001/v2/keys/cnt", bytes.NewReader([]byte(data)))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded; param=value")
+	client := &http.Client{}
+	res, err := client.Do(req)
+	if err != nil {
+		log.Printf("ERROR: Could not update key in etcd: %v", err)
+		return
+	}
+
+	defer res.Body.Close()
+	return
+
+}
 
 func main() {
 	http.HandleFunc("/read", read)
@@ -13,6 +34,7 @@ func main() {
 }
 
 func read(rw http.ResponseWriter, req *http.Request) {
+	increaseEtcdCnt()
 	key := req.FormValue("key")
 	ret := fetchEtcdValue(key)
 	rw.Header().Add("Content-Type", "application/json")

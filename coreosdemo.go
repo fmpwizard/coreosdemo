@@ -13,7 +13,7 @@ func increaseEtcdCnt() {
 
 	data := fmt.Sprintf("value=%+v", rand.Int())
 	log.Printf("here ut comes %s", data)
-	req, _ := http.NewRequest("PUT", "http://etcd:4001/v2/keys/cnt", bytes.NewReader([]byte(data)))
+	req, _ := http.NewRequest("PUT", "http://172.17.42.1:4001/v2/keys/cnt", bytes.NewReader([]byte(data)))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded; param=value")
 	client := &http.Client{}
 	res, err := client.Do(req)
@@ -42,7 +42,7 @@ func read(rw http.ResponseWriter, req *http.Request) {
 }
 
 func fetchEtcdValue(key string) []byte {
-	ret, err := http.Get("http://etcd:4001/v2/keys/" + key)
+	ret, err := http.Get("http://172.17.42.1:4001/v2/keys/" + key)
 	if err != nil {
 		log.Printf("ERROR: Could not get key: %s, we got error: %s", key, err.Error())
 		return nil

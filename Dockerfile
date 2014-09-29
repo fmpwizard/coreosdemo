@@ -10,7 +10,9 @@ ADD . /go/src/github.com/fmpwizard/coreosdemo
 # either manually or with a tool like "godep".)
 RUN go install github.com/fmpwizard/coreosdemo
 
-# Run the outyet command by default when the container starts.
+#CMD echo "$(ifconfig docker0 | grep 'inet ' | awk '{ print $2 etcd}') etcd" >> /etc/hosts
+
+# Run the coreosdemo command by default when the container starts.
 ENTRYPOINT /go/bin/coreosdemo
 
 # Document that the service listens on port 8080.

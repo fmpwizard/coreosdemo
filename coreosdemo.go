@@ -20,7 +20,7 @@ func read(rw http.ResponseWriter, req *http.Request) {
 }
 
 func fetchEtcdValue(key string) []byte {
-	ret, err := http.Get("http://127.0.0.1:4001/v2/keys/" + key)
+	ret, err := http.Get("http://etcd:4001/v2/keys/" + key)
 	if err != nil {
 		log.Printf("ERROR: Could not get key: %s, we got error: %s", key, err.Error())
 		return nil
